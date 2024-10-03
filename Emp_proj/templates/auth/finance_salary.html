@@ -1,0 +1,355 @@
+{% if request.session.role == "finance" %}
+{% load static %}
+{% now "F,Y" as current_year %}
+<!DOCTYPE html>
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="{% static 'assets/' %}"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Tables - Basic Tables | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon/favicon.ico' %}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/core.css' %}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+
+
+    <script src="https://kit.fontawesome.com/b80bc70c27.js" crossorigin="anonymous"></script>
+    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
+    <script src="{% static 'assets/js/config.js' %}"></script>
+  </head>
+
+  <body>
+    <div class="layout-wrapper layout-content-navbar">
+       <div class="layout-container">
+            {% include 'includes/sidebar.html' %} 
+            <div class="layout-page">
+                {% include 'includes/navbar.html' %} 
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Basic Tables</h4>                           
+                        <div class="card">
+                            <div class="row m-2">
+                              <div class="col-sm-9">
+                                <button type="submit" class="btn btn-primary my-2" id="p_btn" ><i class="fa fa-spinner mx-1"></i>Pending</button>
+                                <button type="submit" class="btn btn-primary my-2" id="c_btn"><i class="fa fa-check mx-1"></i>Completed</button>
+                              </div>
+                              <div class="col-sm-2">      
+                                <input class="form-control" type="month" id="month" name="month"  value="">
+                              </div>
+                              <div class="col-sm-1">
+                                <button class="btn btn-primary" id='r_btn'><span class="glyphicon glyphicon-refresh"><i class="fa fa-refresh" aria-hidden="true"></i></span></button>
+                              </div>
+                            </div>
+                            <div class="table-responsive text-nowrap mx-2">
+                            
+                            <table class="table table-striped" id="table">
+                                <thead>
+                                <tr>
+                                    <th>SI.NO</th>
+                                    <th>Emp_id</th>
+                                    <th>Name</th>
+                                    <th>CTC</th>
+                                    <th>Month-CTC</th>
+                                    <th>Month</th>
+                                    <th>Day_Salary</th>
+                                    <th>Present_Days</th>
+                                    <th>Net_Salary</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody class="table-border-bottom-0" id="tbody">
+                                
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal" id="modal">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                      
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                              <h4 class="modal-title">Add Employee</h4>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                      
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                              <form id="aform"  method="post">
+                                      {% csrf_token %}
+                                  <div class="mb-3 row">
+                                    <label for="html5-tel-input" class="col-md-2 col-form-label">EmpId</label>
+                                    <div class="col-md-10">
+                                      <input class="form-control" type="hidden" value="" readonly id="id" name="id" />
+                                      <input class="form-control" type="text" value="" readonly id="empid" name="empid" />
+                                    </div>
+                                  </div>
+                                  <div class="mb-3 row">
+                                      <label for="html5-color-input" class="col-md-2 col-form-label">Present Days</label>
+                                      <div class="col-md-10">
+                                        <input class="form-control" type="text" onfocusout="netsalary(this)" readonly  id="pres_days" name="pres_days" />
+                                      </div>
+                                  </div>
+                                  <div class="mb-3 row">
+                                      <label for="html5-color-input" class="col-md-2 col-form-label">Net Salary</label>
+                                      <div class="col-md-10">
+                                        <input class="form-control" type="text" id="net_sal" name="net_salry" readonly/>
+                                      </div>
+                                  </div>                                    
+                                  <div id="res"></div>
+                            </div>
+                        
+                              <!-- Modal footer -->
+                              <div class="modal-footer">
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                              <button type="button" id="appr" class="btn btn-success">Approve</button> 
+                              </div>
+                            </form>
+                      
+                          </div>
+                        </div>
+                      </div>
+                    <footer class="content-footer footer bg-footer-theme">
+                    <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                        <div class="mb-2 mb-md-0">
+                        ©
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        k
+                        , made with ❤️ by
+                        <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>
+                        </div>
+                        <div>
+                        <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+                        <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
+
+                        <a
+                            href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
+                            target="_blank"
+                            class="footer-link me-4"
+                            >Documentation</a
+                        >
+                        <a
+                            href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+                            target="_blank"
+                            class="footer-link me-4"
+                            >Support</a
+                        >
+                        </div>
+                    </div>
+                    </footer>
+                </div>    
+           </div>
+        </div>
+    </div>
+    <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script> 
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+   
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+
+  
+
+    <script>
+        $(document).ready(function(){
+          var now = new Date(); 
+          var month = (now. getMonth() + 1); 
+          var day = now. getFullYear();
+          if (month < 10) {
+            month = "0" + month;
+          }
+          if (day < 10){
+            day = "0" + day; 
+          } 
+          var today = day+"-"+month;
+          $('#month').val(today);
+            sel1();
+            sel();
+         });
+       
+        $('#month').change(function(){
+          sel1();
+          sel();
+        });
+
+
+        $('#p_btn').click(function(){
+          sel();
+        });
+
+
+        $('#c_btn').click(function(){
+          sel1();
+        });
+
+        $('#r_btn').click(function(){
+          sel();
+        });
+
+        function sel1(){
+          var i=1;
+          $("#table").dataTable().fnDestroy();
+          month=new Date($('#month').val());
+          table = $('#table').DataTable({
+            "dom": 'Bfrtip',
+            "buttons": [
+              'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "ajax": {
+                "processing": true,
+                "url": '/f_emp_salary1',
+                "dataSrc": "",
+                "type":"POST",
+                "data":{month:$('#month').val(),csrfmiddlewaretoken:'{{csrf_token}}'}
+            },
+            "columns": [
+                { "data": function(data, type, full, meta) {
+                  return i++;
+                } },
+                { "data": "emp_id"},
+                { "data": "name"},
+                { "data": "ctc"},
+                { "data": "month_ctc"},
+                { "data": "month"},
+                { "data": "day_salary"},
+                { "data": "present_days"},
+                { "data": "net_salary"},
+                { "data": "status"},
+                {'data':function(o){
+                    return "<a class='btn btn-primary btn-sm cc'type='button'><i class='fa fa-check text-white'></i></a>";
+                }            
+                }
+            ],
+          });                          
+         }
+       function sel(){
+          var i=1;
+          $("#table").dataTable().fnDestroy();
+          month=new Date($('#month').val());
+          table = $('#table').DataTable({
+            "dom": 'Bfrtip',
+            "buttons": [
+              'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            "ajax": {
+                "processing": true,
+                "url": '/f_emp_salary',
+                "dataSrc": "",
+                "type":"POST",
+                "data":{month:$('#month').val(),csrfmiddlewaretoken:'{{csrf_token}}'}
+            },
+            "columns": [
+                { "data": function(data, type, full, meta) {
+                  return i++;
+                } },
+                { "data": "emp_id"},
+                { "data": "name"},
+                { "data": "ctc"},
+                { "data": "month_ctc"},
+                { "data": "month"},
+                { "data": "day_salary"},
+                { "data": "present_days"},
+                { "data": "net_salary"},
+                { "data": "status"},
+                {'data':function(o){
+                    return "<a class='btn btn-primary btn-sm cc' data-bs-toggle='modal'onclick='edit("+o.id+")' data-bs-target='#modal' type='button'><i class='fa fa-spinner text-white'></i></a>";
+                }            
+                }
+            ],
+          });                          
+        }
+         
+          function edit(id){
+            $.ajax({
+              url: '/f_edit_salary',
+              data: {
+                  'id': id
+              },
+              dataType: 'json',
+              success:function(data){                 
+                $('#empid').val(data.emp_id);
+                $('#id').val(data.id);
+                $('#net_sal').val(data.net_salary);
+                $('#pres_days').val(data.present_days);    
+              }
+            });
+          }
+   
+          $("#appr").click(function(){
+            var month=$('#month').val();
+            var id=$('#id').val();
+            var form=$('#aform').serialize();
+            $.ajax({
+                url:"/f_appr_salary",
+                type:"POST",
+                data:$('#aform').serialize(),
+                dataType:"JSON",
+                success:function(data){
+                if(data == "vaild"){
+                    $("#res").html('<strong><p class="text-success">Data Inserted succefully</p></strong>').show().fadeOut(5000);
+                    $('#modal').modal('toggle').fadeOut(8000);
+                    sel();                          
+                } 
+                else{
+                    $("#res").html('<strong><p class="text-danger">Please fill your form field.</p></strong>').show().fadeOut(3000);
+                }         
+                }   
+            });
+          });
+
+    </script> 
+  </body>
+</html>
+{% else %}
+{% include 'auth/login.html' %}
+{% endif %} 

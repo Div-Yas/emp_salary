@@ -1,0 +1,253 @@
+{% if request.session.role == "user" or request.session.role == "finance" %}
+{% load static %}
+  <!DOCTYPE html>
+  <html
+    lang="en"
+    class="light-style layout-menu-fixed"
+    dir="ltr"
+    data-theme="theme-default"
+    data-assets-path="{%  static 'assets/' %}"
+    data-template="vertical-menu-template-free"
+  >
+    <head>
+      <meta charset="utf-8"/>
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+      />
+      <title>Dashboard - Analytics | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+      <meta name="description" content="" />
+      <link rel="icon" type="image/x-icon" href="{%  static 'assets/img/favicon/favicon.ico' %}" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+        rel="stylesheet"
+      />
+      <link rel="stylesheet" href="{%  static 'assets/vendor/fonts/boxicons.css' %}" />
+      <link rel="stylesheet" href="{%  static 'assets/vendor/css/core.css' %}" class="template-customizer-core-css" />
+      <link rel="stylesheet" href="{%  static 'assets/vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
+      <link rel="stylesheet" href="{%  static 'assets/css/demo.css' %}" />
+      <link rel="stylesheet" href="{%  static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+      <link rel="stylesheet" href="{%  static 'assets/vendor/libs/apex-charts/apex-charts.css' %}" />
+      <script src="{%  static 'assets/vendor/js/helpers.js' %}"></script>
+      <script src="{%  static 'assets/js/config.js' %}"></script>
+    </head>
+  
+    <body>
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+          {% include 'includes/sidebar.html' %} 
+            <div class="layout-page">
+              {% include 'includes/navbar.html' %}
+               <div class="content-wrapper">
+                    <div class="container my-5">  
+                        <div class="row my-2">
+                            <div class="col-sm-2">
+                                <select class="form-select" name="months" id="months">
+                                    {% for r in d %}
+                                    <option>{{ r }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>                                 
+                        <div id="d2" class="card mb-4">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="text-center lh-1 mb-2">
+                                            <h6 class="fw-bold">Payslip</h6><span class="fw-normal mn">Payment slip for the month of  <b id="mnth"></b></span>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div><span class="fw-bolder">EMP Name</span></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div id="name"></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div> <span class="fw-bolder">EMP NO</span></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div id="empid"></div>
+                                                    </div>
+                                                
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div><span class="fw-bolder">Joining Date</span></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div id="jdate"></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div> <span class="fw-bolder">Bank Name</span></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div>IOB</div>
+                                                    </div>
+                                                </div>
+                                                <!-- dept -->
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div><span class="fw-bolder">Dept</span></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div id="dept">IT</div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div> <span class="fw-bolder">Acc No.</span></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div>182409876</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div><span class="fw-bolder">Present Days</span></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div id="pday"></div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-3">
+                                                        <div> <span class="fw-bolder">PAN No.</span>  </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div>ACY0093</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div><span class="fw-bolder">Loss of Pay</span></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div id="lpay"></div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-3">
+                                                        <div> <span class="fw-bolder">PF No.</span>  </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div>BBC0093</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <table class="mt-4 table border table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">Earnings</th>
+                                                        <th scope="col">Amount</th>
+                                                        <th scope="col">Actual</th>
+                                                        <th scope="col">Deductions</th>
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th scope="row">Basic</th>
+                                                        <td class="tb1"></td>
+                                                        <td class="tb2"></td>
+                                                        <td class="deduc"></td>
+                                                    
+                                                    </tr>
+                                                    <tr>
+                                                        <th scope="row">Total INR</th>
+                                                        <td class="tb1"></td>
+                                                        <td class="tb2"></td> 
+                                                        <td class="deduc"></td>
+                                                    </tr>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="row border mt-2">
+                                            <h6 class="mt-2">Net Pay for this month: <span id="n" class="fw-bolder net"></span> </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                            <div class="card-footer">
+                                <a href="" id="submit" class="btn btn-primary mr-2 float-end">Download</a>
+                            </div>
+                        </div>              
+                   </div>
+               </div>
+            </div>
+        </div>
+    </div>
+      <script src="{%  static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+      <script src="{%  static 'assets/vendor/libs/popper/popper.js' %}"></script>
+      <script src="{%  static 'assets/vendor/js/bootstrap.js' %}"></script>
+      <script src="{%  static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+      <script src="{%  static 'assets/vendor/js/menu.js' %}"></script>
+      <script src="{%  static 'assets/vendor/libs/apex-charts/apexcharts.js' %}"></script>
+      <script src="{%  static 'assets/js/main.js' %}"></script>
+      <script src="{%  static 'assets/js/dashboards-analytics.js' %}"></script>
+      <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+      <script>
+        $(document).ready(function(){
+            var now = new Date(); 
+            var month = (now. getMonth() + 0); 
+            var day = now. getFullYear();
+            if (month < 10) {
+              month = "0" + month;
+            }
+            if (day < 10){
+              day = "0" + day; 
+            } 
+            var today = day+"-"+month;
+            $('#months').val(today);
+            sel()
+        });
+        
+        $('#months').change(function(){
+          sel();
+        });
+
+        function sel(){
+            var month=$('#months').val();
+            $.ajax({
+                url:"/emp_payslip",
+                type:"POST",
+                data:{'month':month,csrfmiddlewaretoken:'{{csrf_token}}'},
+                dataType:"JSON",
+                success:function(data){
+                  if(data.user =='invaild') 
+                  {
+                    data.user.empty();
+                    $('#d2').html("No data Found");
+                  }  
+                  else if(data.user){
+                    var net=Math.round(data.user['net_sal']);
+                    var lpay=25-data.user['pday']
+                    var deduc=data.user['m_ctc']-net
+                    $('#name').html(data.user['name']);
+                    $('#jdate').html(data.user['jdate']);
+                    $('#pday').html(data.user['pday']);
+                    $('#lpay').html(lpay);
+                    $('#empid').html(data.user['emp_id']);
+                    $('#mnth').html(data.user['month']);
+                    
+                    $('.tb1').html(data.user['m_ctc']);
+                    $('.tb2').html(net);                   
+                    $('#n').html(net);  
+                    $('.deduc').html(deduc);
+                    var m=data.user['month']
+                    var url_mask = "{% url 'p_slip' month=12345 %}".replace(/12345/, month.toString());
+                    $('#submit').attr("href",url_mask); 
+                  }          
+                }   
+            });
+            
+            }
+      </script>
+    </body>
+  </html>
+  {% else %}
+  {% include 'auth/login.html' %}
+  {% endif %} 

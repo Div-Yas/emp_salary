@@ -1,0 +1,431 @@
+{% if request.session.role == "admin" %}
+{% load static %}
+<!DOCTYPE html>
+<html
+  lang="en"
+  class="light-style layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="{% static 'assets/' %}"
+  data-template="vertical-menu-template-free"
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+
+    <title>Tables - Basic Tables | Sneat - Bootstrap 5 HTML Admin Template - Pro</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/img/favicon/favicon.ico' %}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/fonts/boxicons.css' %}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/core.css' %}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{% static 'assets/vendor/css/theme-default.css' %}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+    <script src="{% static 'assets/vendor/js/helpers.js' %}"></script>
+    <script src="{% static 'assets/js/config.js' %}"></script>
+  </head>
+
+  <body>
+    <div class="layout-wrapper layout-content-navbar">
+       <div class="layout-container">
+            {% include 'includes/sidebar.html' %} 
+            <div class="layout-page">
+                {% include 'includes/navbar.html' %} 
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                      <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Tables /</span> Basic Tables</h4>
+                        <div class="card">
+                          <div class="row m-2">
+                            <div class="col-sm-10">
+                              <button type="submit" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#modal">Add Employee</button>
+                            </div>
+                            <div class="col-sm-2">
+                                <select class="form-select" name="roles" id="roles">
+                                    <option>All</option>
+                                    {% for r in d %}
+                                    <option>{{ r }}</option>
+                                    {% endfor %} 
+                                </select>
+                            </div>
+                          </div>  
+                          <div class="table-responsive text-nowrap mx-2">                            
+                            <table class="table table-striped" id="tb1">
+                              <thead>
+                                <tr>
+                                  <th>ID</th>
+                                  <th>Name</th>
+                                  <th>Email</th>
+                                  <th>Role</th>
+                                  <th>EmpId</th>
+                                  <th>CTC</th>
+                                  <th>DOJ</th>
+                                  <th>Actions</th>
+                                </tr>
+                              </thead>
+                            </table>
+                          </div>                            
+                        </div>
+                    </div>
+                    <div class="modal" id="modal">
+                        <div class="modal-dialog modal-dialog-centered">
+                          <div class="modal-content">
+                      
+                            <!-- Modal Header -->
+                            <div class="modal-header">
+                              <h4 class="modal-title">Add Employee</h4>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                      
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <form id="aform"  method="post">
+                                    {% csrf_token %}
+                                    <input class="form-control" type="hidden" id="id" name="id"/>
+                                    <div class="mb-3 row">
+                                      <label for="html5-text-input" class="col-md-2 col-form-label">Name</label>
+                                      <div class="col-md-10">
+                                        <input class="form-control" type="text" id="name" name="name"/>
+                                      </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                      <label for="html5-email-input" class="col-md-2 col-form-label">Email</label>
+                                      <div class="col-md-10">
+                                        <input class="form-control" type="email" id="email" name="email"/>
+                                      </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                      <label for="html5-tel-input" class="col-md-2 col-form-label">EmpId</label>
+                                      <div class="col-md-10">
+                                        <input class="form-control" type="text" id="empid" name="empid" />
+                                      </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                      <label for="html5-date-input" class="col-md-2 col-form-label">DOJ</label>
+                                      <div class="col-md-10">
+                                        <input class="form-control" type="date" id="doj" name="doj" />
+                                      </div>
+                                    </div>
+                                  
+                                    <div class="mb-3 row">
+                                      <label for="exampleFormControlSelect1" class="col-md-2 col-form-label">Role</label>
+                                      <div class="col-md-10">
+                                        <select class="form-select" name="role" id="role" aria-label="Default select example">
+                                            <option selected>choose</option>
+                                            <option value="finance">finance</option>
+                                            <option value="user">user</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                    
+                                    <div class="mb-3 row">
+                                      <label for="html5-color-input" class="col-md-2 col-form-label">CTC</label>
+                                      <div class="col-md-10">
+                                        <input class="form-control" type="text" id="ctc" name="ctc" />
+                                      </div>
+                                    </div>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" id="submit" class="btn btn-primary">Submit</button>
+                                 </form>
+                                 <div id="res"></div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    {% comment %} update modal {% endcomment %}
+                    <div class="modal" id="modal1">
+                      <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                    
+                          <!-- Modal Header -->
+                          <div class="modal-header">
+                            <h4 class="modal-title">Edit Employee</h4>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                          </div>
+                    
+                          <!-- Modal body -->
+                          <div class="modal-body">
+                              <form id="aform1" method="post">
+                                  {% csrf_token %}
+                                  <input class="form-control" type="hidden" id="id1" name="id1"/>
+                                  <div class="mb-3 row">
+                                    <label for="html5-text-input" class="col-md-2 col-form-label">Name</label>
+                                    <div class="col-md-10">
+                                      <input class="form-control" type="text" id="name1" name="name1"/>
+                                    </div>
+                                  </div>
+                                  <div class="mb-3 row">
+                                    <label for="html5-email-input" class="col-md-2 col-form-label">Email</label>
+                                    <div class="col-md-10">
+                                      <input class="form-control" type="email" id="email1" name="email1"/>
+                                    </div>
+                                  </div>
+                                  <div class="mb-3 row">
+                                    <label for="html5-tel-input" class="col-md-2 col-form-label">EmpId</label>
+                                    <div class="col-md-10">
+                                      <input class="form-control" type="text" id="empid1" name="empid1" />
+                                    </div>
+                                  </div>
+                                  <div class="mb-3 row">
+                                    <label for="html5-date-input" class="col-md-2 col-form-label">DOJ</label>
+                                    <div class="col-md-10">
+                                      <input class="form-control" type="date" id="doj1" name="doj1" />
+                                    </div>
+                                  </div>
+                                
+                                  <div class="mb-3 row">
+                                    <label for="exampleFormControlSelect1" class="col-md-2 col-form-label">Role</label>
+                                    <div class="col-md-10">
+                                      <select class="form-select" name="role1" id="role1" aria-label="Default select example">
+                                          <option selected>choose</option>
+                                          <option value="finance">finance</option>
+                                          <option value="user">user</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  
+                                  <div class="mb-3 row">
+                                    <label for="html5-color-input" class="col-md-2 col-form-label">CTC</label>
+                                    <div class="col-md-10">
+                                      <input class="form-control" type="text" id="ctc1" name="ctc1" />
+                                    </div>
+                                  </div>
+                                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                  <button type="button" id="update" class="btn btn-primary">Submit</button>
+                               </form>
+                               <div id="res1"></div>
+                          </div>
+                        </div>
+                      </div>
+                  </div>
+                    <footer class="content-footer footer bg-footer-theme">
+                      <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                          <div class="mb-2 mb-md-0">
+                          ©
+                          <script>
+                              document.write(new Date().getFullYear());
+                          </script>
+                          , made with ❤️ by
+                          <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>
+                          </div>
+                          <div>
+                          <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+                          <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
+
+                          <a
+                              href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
+                              target="_blank"
+                              class="footer-link me-4"
+                              >Documentation</a
+                          >
+
+                          <a
+                              href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+                              target="_blank"
+                              class="footer-link me-4"
+                              >Support</a
+                          >
+                          </div>
+                      </div>
+                    </footer>
+                </div>    
+           </div>
+        </div>
+    </div>
+    <script src="{% static 'assets/vendor/libs/jquery/jquery.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/popper/popper.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+    <script src="{% static 'assets/vendor/js/menu.js' %}"></script>
+    <script src="{% static 'assets/js/main.js' %}"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap4.min.js"></script>
+    
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+  
+
+    <script>
+      $('#roles').change(function(){
+        sel();
+      });
+
+      $(document).ready(function(){
+        sel1();
+      });
+
+      function sel1(){
+        $("#tb1").dataTable().fnDestroy();
+        table = $('#tb1').DataTable({
+          "dom": 'Bfrtip',
+          "buttons": [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+          ],
+          "ajax": {
+            "processing": true,
+            "url": '/emp_table1',
+            "dataSrc": '',
+            "type":'GET',
+          },
+          "columns": [
+                  { "data": "id"},
+                  { "data": "name"},
+                  { "data": "email"},
+                  { "data": "role"},
+                  { "data": "emp_id"},
+                  { "data": "ctc"},
+                  { "data": "doj"},
+                  { "data": function(emp_id){
+                    return '<a class="btn btn-danger btn-sm mx-1" onclick="deleteUser('+emp_id.emp_id+')" type="button"><i class="bx bx-trash text-white me-1"></i></a><a class="btn btn-primary btn-sm edit1" onclick="editUser('+emp_id.emp_id+')"  type="button"  data-bs-toggle="modal" data-bs-target="#modal1"><i class="bx bx-edit text-white"></i></a>';
+                    }
+                  }
+              ],
+        });
+   
+      }  
+
+      function sel(){
+        $("#tb1").dataTable().fnDestroy();
+        var role=$('#roles').val();
+        table = $('#tb1').DataTable({
+          "dom": 'Bfrtip',
+          "buttons": [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+          ],
+          "ajax": {
+            "processing": true,
+            "url": '/emp_table',
+            "data":{'role':role,csrfmiddlewaretoken:'{{csrf_token}}'},
+            "dataSrc": '',
+            "type":'GET',
+          },
+          "columns": [
+                  { "data": "id"},
+                  { "data": "name"},
+                  { "data": "email"},
+                  { "data": "role"},
+                  { "data": "emp_id"},
+                  { "data": "ctc"},
+                  { "data": "doj"},
+                  { "data": function(emp_id){
+                    return '<a class="btn btn-danger btn-sm mx-1" onclick="deleteUser('+emp_id.emp_id+')" type="button"><i class="bx bx-trash text-white me-1"></i></a><a class="btn btn-primary btn-sm edit1" onclick="editUser('+emp_id.emp_id+')"  type="button"  data-bs-toggle="modal" data-bs-target="#modal1"><i class="bx bx-edit text-white"></i></a>';
+                    }
+                  }
+              ],
+        });
+   
+      }   
+
+        $("#submit").click(function(){
+          $.ajax({
+            url:"/emp_details_ins",
+            type:"POST",
+            data:$('#aform').serialize(),
+            dataType:"JSON",
+            success:function(data){
+              if(data=="vaild"){
+                  $("#res").html('<strong><p class="text-success">Data Inserted succefully</p></strong>').show().fadeOut(5000);                      
+                  $("#aform")[0].reset();
+                  $('#modal').modal('toggle').fadeOut(8000);
+                  table.ajax.reload(); 
+              } 
+              else{
+                $("#res").html('<strong><p class="text-danger">Please fill your form field.</p></strong>').show().fadeOut(3000);
+              }         
+            },   
+          });           
+        });
+
+        $("#update").click(function(){
+          $.ajax({
+            url: '/update',
+            type:"POST",
+            dataType:"JSON",
+            data:$('#aform1').serialize(),
+            success:function(data){
+              if(data=="vaild"){
+                $("#res1").html('<strong><p class="text-success">Data Updated succefully</p></strong>').show().fadeOut(3000);                      
+                $("#aform1")[0].reset();
+                $('#modal1').modal('toggle').fadeOut(8000);
+                table.ajax.reload();   
+              } 
+              else{
+                $("#res1").html('<strong><p class="text-danger">Error!</p></strong>').show().fadeOut(3000);
+              }  
+            }
+          });
+        });
+  
+      function deleteUser(emp_id)
+      {
+      var action = confirm("Are you sure you want to delete this user?");
+      if (action != false) {
+        $.ajax({
+            url: '/delete',
+            data: {
+                'emp_id': emp_id,
+            },
+            dataType: 'json',
+            success:function(data){
+                if (data.deleted){
+                  table.ajax.reload(); 
+                }
+            }               
+        });
+      }
+      }
+    
+      function editUser(emp_id)
+      {
+        $.ajax({
+            url: '/edit',
+            data: {
+                'emp_id': emp_id,
+            },
+            dataType: 'json',
+            success:function(data){
+                $('#id1').val(data.user['empid']);
+                $('#name1').val(data.user['name']);
+                $('#email1').val(data.user['email']);
+                $('#doj1').val(data.user['doj']);
+                $('#ctc1').val(data.user['ctc']);
+                $('#role1').val(data.user['role']);
+                $('#empid1').val(data.user['empid']);
+            }               
+        });
+      }
+      
+    </script>
+  </body>
+</html>
+{% else %}
+{% include 'auth/login.html' %}
+{% endif %}

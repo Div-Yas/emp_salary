@@ -1,0 +1,102 @@
+<html>
+<head>
+<style>
+  tr{
+    padding:5px;
+
+  }
+  td,th{
+    font-size: 15px;
+  }
+  .pd{
+    padding-left:5px;
+  }
+    
+</style>
+
+</head>
+<body>
+    <div height="100px" style="background-color:#363636;color:#ffffff;text-align:center;font-size:15px; font-weight:600;padding-top:10px;">
+    <b>Be Well Pvt.Ltd.</b><br>
+    <b>Payslip for the month of {{ month }} </b>
+    </div>
+
+<table border="1">
+{% comment %} <tr ">
+<td colspan='4'> 
+    
+</td>    {% endcomment %}
+</tr>
+
+<tr>
+<th>Employee Id</th>
+<td class="pd">{{ emp_id }}</td>
+<th> Employee Name</th>
+<td class="pd">{{ name }}</td>
+</tr>
+
+<tr>
+<th>Join Date</th>
+<td class="pd">{{ jdate }}</td>
+<th>Lop Days</th>
+<td class="pd">{{ lpay }}</td>
+</tr>
+
+<tr>
+<th>Department</th>
+<td class="pd">IT</td>
+<th>Designation</th>
+<td>Trainee</td>
+</tr>
+</table>
+<tr></tr>
+<br/>
+<table border="1">
+<tr>
+<th >Bank Name</th>
+<th>PresDays</th>
+<th>Acc No.</th>
+<th >PAN No.</th>
+
+</tr>
+<tr>
+<td class="pd">canara bank</td>
+<td class="pd">{{ pday }}</td>
+<td class="pd">ACY0093</td>
+<td class="pd">BBC0093</td>
+</tr>
+</table>
+<br/>
+<table border='1'>
+    
+        <tr>
+            <th >Earnings</th>
+            <th >Amount</th>
+            <th >Actual</th>
+            <th >Deductions</th>
+            
+        </tr>
+        <tr>
+            <th >Basic</th>
+            <td >{{ m_ctc }}</td>
+            <td >{{ net_sal }}</td>
+            <td >{{deduc}}</td>
+            
+        </tr>
+        <tr>
+            <th >TOTAL INR</th>
+            <td >{{ m_ctc }}</td>
+            <td >{{ net_sal }}</td>
+            <td >{{deduc}}</td>
+            
+        </tr> 
+        <tr>
+            <td colspan="4">Net Pay for this month: <span>{{ net_sal }}</span></td>
+        </tr>
+ </table>
+ <div>
+    <h6></h6>
+ </div>
+</body>
+</html>
+
